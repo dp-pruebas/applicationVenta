@@ -1,22 +1,22 @@
 package cl.dpichinil.applicationventas.controller;
 
 import cl.dpichinil.applicationventas.dto.ResponseDto;
-import cl.dpichinil.applicationventas.dto.VentaDto;
-import cl.dpichinil.applicationventas.service.VentaService;
+import cl.dpichinil.applicationventas.dto.SaleDto;
+import cl.dpichinil.applicationventas.service.SaleService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api")
-public class VentaController {
-    private VentaService ventaService;
+@RequestMapping("api/sale")
+public class SaleController {
+    private SaleService ventaService;
 
-    public VentaController(VentaService ventaService) {
+    public SaleController(SaleService ventaService) {
         this.ventaService = ventaService;
     }
 
     @PostMapping("insert")
-    public ResponseDto insert(@RequestBody VentaDto dto){
-        return ventaService.ingresarVenta(dto);
+    public ResponseDto insert(@RequestBody SaleDto dto){
+        return ventaService.insertSale(dto);
     }
 
     @GetMapping("get/{id}")
