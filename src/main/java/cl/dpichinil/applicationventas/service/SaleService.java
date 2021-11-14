@@ -2,6 +2,8 @@ package cl.dpichinil.applicationventas.service;
 
 import cl.dpichinil.applicationventas.dao.SaleDao;
 import cl.dpichinil.applicationventas.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 @Service
 public class SaleService {
     private SaleDao dao;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SaleService(SaleDao dao) {
         this.dao = dao;
@@ -30,6 +33,7 @@ public class SaleService {
                 response = new ResponseDto(1001,"Error al obtener la data");
             }
         }catch(Exception e){
+            logger.error(e.getMessage(), e);
             response = new ResponseDto(1000,"Error al generar la data");
         }
         return response;
@@ -46,6 +50,7 @@ public class SaleService {
                 response = new ResponseDto(1001,"Error al obtener la data");
             }
         }catch(Exception e){
+            logger.error(e.getMessage(), e);
             response = new ResponseDto(1000,"Error al generar la data");
         }
         return response;
@@ -54,9 +59,15 @@ public class SaleService {
     public ResponseDto getList() {
         ResponseDto response = null;
         try {
-            response = new ResponseDto();
+            List<SaleDto> list = dao.getListSale();
+            if(list != null){
+                response = new ResponseDto(0,"Data Generada", list);
+            }else{
+                response = new ResponseDto(1001,"Error al obtener la data");
+            }
         }catch(Exception e){
-
+            logger.error(e.getMessage(), e);
+            response = new ResponseDto(1000,"Error al generar la data");
         }
         return response;
     }

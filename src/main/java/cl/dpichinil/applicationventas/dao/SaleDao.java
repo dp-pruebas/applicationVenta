@@ -23,6 +23,7 @@ public class SaleDao {
     private final String INS_SALE_DETAIL = "CALL sp_ins_sale_detail(?, ?, ?, ?)";
 
     private final String SEL_SALE_BY_ID = "CALL sp_sel_sale_by_id(?)";
+    private final String SEL_SALE_LIST = "CALL sp_sel_sale_list()";
     private final String SEL_SALE_DETAIL_BY_ID_SALE = "CALL sp_sel_sale_detail_by_id_sale(?)";
 
     private JdbcTemplate jdbcTemplate;
@@ -109,14 +110,14 @@ public class SaleDao {
                     e.setDiscount(rs.getInt("discount"));
                     e.setIva(rs.getInt("iva"));
                     e.setTotal(rs.getInt("total"));
+                    List<SaleDetailDto> list = getDetailById(e.getId());
+                    e.setDetails(list);
                     return e;
                 }else{
                     return null;
                 }
             }
         });
-        List<SaleDetailDto> list = getDetailById(dto.getId());
-        dto.setDetails(list);
         return dto;
     }
 
@@ -140,6 +141,35 @@ public class SaleDao {
                     e.setProductId(rs.getInt("product_id"));
                     e.setAmount(rs.getInt("amount"));
                     e.setSubtotal(rs.getInt("subtotal"));
+                    list.add(e);
+                }
+                return list;
+            }
+        });
+        return list;
+    }
+
+    public List<SaleDto> getListSale() {
+        String sql = this.SEL_SALE_LIST;
+
+        List<SaleDto> list = this.jdbcTemplate.query(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql);
+                return ps;
+            }
+        } , new ResultSetExtractor<List<SaleDto>>() {
+            @Override
+            public List<SaleDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<SaleDto> list = new ArrayList<SaleDto>();
+                SaleDto e = null;
+                while(rs.next()) {
+                    e = new SaleDto();
+                    e.setId(rs.getInt("id"));
+                    e.setDate(rs.getString("date"));
+                    e.setDiscount(rs.getInt("discount"));
+                    e.setIva(rs.getInt("iva"));
+                    e.setTotal(rs.getInt("total"));
                     list.add(e);
                 }
                 return list;
