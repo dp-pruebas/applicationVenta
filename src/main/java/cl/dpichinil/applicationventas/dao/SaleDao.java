@@ -25,6 +25,7 @@ public class SaleDao {
     private final String SEL_SALE_BY_ID = "CALL sp_sel_sale_by_id(?)";
     private final String SEL_SALE_LIST = "CALL sp_sel_sale_list()";
     private final String SEL_SALE_DETAIL_BY_ID_SALE = "CALL sp_sel_sale_detail_by_id_sale(?)";
+    private final String DEL_SALE = "CALL sp_del_sale_by_id(?)";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -110,8 +111,6 @@ public class SaleDao {
                     e.setDiscount(rs.getInt("discount"));
                     e.setIva(rs.getInt("iva"));
                     e.setTotal(rs.getInt("total"));
-                    List<SaleDetailDto> list = getDetailById(e.getId());
-                    e.setDetails(list);
                     return e;
                 }else{
                     return null;
@@ -121,7 +120,7 @@ public class SaleDao {
         return dto;
     }
 
-    public List<SaleDetailDto> getDetailById(int id) {
+    public List<SaleDetailDto> getDetailListById(int id) {
         String sql = this.SEL_SALE_DETAIL_BY_ID_SALE;
         List<SaleDetailDto> list = this.jdbcTemplate.query(new PreparedStatementCreator() {
             @Override
@@ -176,5 +175,30 @@ public class SaleDao {
             }
         });
         return list;
+    }
+
+    public int deleteById(int id) {
+        String sql = this.DEL_SALE;
+
+        Integer affectedRows = this.jdbcTemplate.query(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, id);
+                return ps;
+            }
+        } , new ResultSetExtractor<Integer>() {
+            @Override
+            public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+                if(rs.next()) {
+                    Integer affectedRows = 0;
+                    affectedRows = rs.getInt("affected_rows");
+                    return affectedRows;
+                }else {
+                    return null;
+                }
+            }
+        });
+        return affectedRows;
     }
 }

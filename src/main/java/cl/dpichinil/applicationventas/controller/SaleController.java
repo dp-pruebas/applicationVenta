@@ -28,4 +28,14 @@ public class SaleController {
     public ResponseDto list(){
         return ventaService.getList();
     }
+
+    @GetMapping("detail/{id}")
+    public ResponseDto getDetail(@PathVariable("id") int id){
+        return ventaService.getDetailById(id);
+    }
+
+    @GetMapping("delete/{id}")
+    public ResponseDto getDelete(@PathVariable("id") int id){
+        return ventaService.deleteById(id);
+    }
 }

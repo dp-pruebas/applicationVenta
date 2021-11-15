@@ -1,29 +1,29 @@
 package cl.dpichinil.applicationventas.dto;
 
 public class ResponseDto {
-    private int id;
+    private int code;
     private String message;
     private Object data;
 
     public ResponseDto() {
 
     }
-    public ResponseDto(int id, String message) {
-        this.id = id;
+    public ResponseDto(int code, String message) {
+        this.code = code;
         this.message = message;
     }
-    public ResponseDto(int id, String message, Object data) {
-        this.id = id;
+    public ResponseDto(int code, String message, Object data) {
+        this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public int getId() {
-        return id;
+    public int getCode() {
+        return code;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {

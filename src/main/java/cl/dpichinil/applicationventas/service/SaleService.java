@@ -71,4 +71,36 @@ public class SaleService {
         }
         return response;
     }
+
+    public ResponseDto getDetailById(int id) {
+        ResponseDto response = null;
+        try {
+            List<SaleDetailDto> list = dao.getDetailListById(id);
+            if(list != null){
+                response = new ResponseDto(0,"Data Generada", list);
+            }else{
+                response = new ResponseDto(1001,"Error al obtener la data");
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            response = new ResponseDto(1000,"Error al generar la data");
+        }
+        return response;
+    }
+
+    public ResponseDto deleteById(int id) {
+        ResponseDto response = null;
+        try {
+            int result = dao.deleteById(id);
+            if(result > 0){
+                response = new ResponseDto(0,"Data Generada", result);
+            }else{
+                response = new ResponseDto(1001,"Error al obtener la data");
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            response = new ResponseDto(1000,"Error al generar la data");
+        }
+        return response;
+    }
 }
